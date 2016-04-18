@@ -1,6 +1,10 @@
 # node-fdsh-client-lambda
 A Node.js client for the Federal Data Services Hub (FDSH) designed for AWS Lambda.
 
+This is basically a lightweight wrapper around the
+[`fdsh-client` Node package](https://www.npmjs.com/package/fdsh-client)
+that allows it to be executed by [AWS Lambda](https://aws.amazon.com/lambda/).
+
 ### Public domain
 
 This project is in the worldwide [public domain](LICENSE.md). As stated in [CONTRIBUTING](CONTRIBUTING.md):
