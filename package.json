@@ -1,0 +1,28 @@
+{
+  "name": "fdsh-client-lambda",
+  "version": "0.1.0",
+  "description": "A client for the Federal Data Services Hub (FDSH) designed for AWS Lambda.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/presidential-innovation-fellows/node-fdsh-client-lambda.git"
+  },
+  "keywords": [
+    "aws",
+    "amazon",
+    "lambda",
+    "government"
+  ],
+  "author": "Ross Dakin",
+  "license": "CC0-1.0",
+  "bugs": {
+    "url": "https://github.com/presidential-innovation-fellows/node-fdsh-client-lambda/issues"
+  },
+  "homepage": "https://github.com/presidential-innovation-fellows/node-fdsh-client-lambda#readme",
+  "dependencies": {
+    "fdsh-client": "^0.1.0"
+  }
+}
