@@ -5,6 +5,15 @@ This is basically a lightweight wrapper around the
 [`fdsh-client` Node package](https://www.npmjs.com/package/fdsh-client)
 that allows it to be executed by [AWS Lambda](https://aws.amazon.com/lambda/).
 
+TODO:
+* tests
+* local development test -- currently an uncommitted test.js w/ secrets in it (create some kind of .env system)
+* other tasks noted in the code
+
+Tips:
+* compile (`npm install`) on an AWS Linux EC2 instance before zipping for deployment, otherwise you may see runtime failures (too bad Lambda doesn't handle the npm install for us on its native architecture)
+*
+
 ### Public domain
 
 This project is in the worldwide [public domain](LICENSE.md). As stated in [CONTRIBUTING](CONTRIBUTING.md):
