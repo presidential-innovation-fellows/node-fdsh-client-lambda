@@ -40,39 +40,42 @@ function handler(event, context, callback) {
 }
 
 function initEvent(event, context, callback, initEventCallback) {
-  // TODO: clean this up so that it's prettier and parallelized (promises?)
   // TODO: assert presence of expected env vars
   // TODO: put more console logging in place
 
-  if (event.env.cert) {
-    initKey();
-  } else {
-    initCert();
-  }
-
-  function initCert() {
-    s3.getData(event.env.s3Bucket,
-               event.env.certS3Path,
-	       function (err, data) {
-                 if (err) return initEventCallback(err);
-                 event.env.cert = data;
-                 initKey();
-	       });
-  }
-
-  function initKey() {
-    if (event.env.key) {
-      initEventCallback();
-    } else {
-      s3.getData(event.env.s3Bucket,
-                 event.env.keyS3Path,
-	         function (err, data) {
-                   if (err) return initEventCallback(err);
-                   event.env.key = data;
-                   initEventCallback();
-	         });
+  // define which variables need to be set and where their data live in S3
+  let dataDefs = [
+    {
+      obj: event.env,
+      objKey: 'cert', // event.env.cert
+      s3Path: event.env.certS3Path
+    }, {
+      obj: event.env,
+      objKey: 'key', // event.env.key
+      s3Path: event.env.keyS3Path
     }
+  ]
+
+  // only grab data from S3 for variables that aren't already set
+  dataDefs = dataDefs.filter(dd => typeof dd.obj[dd.objKey] === 'undefined')
+
+  // create promises
+  for (var dd of dataDefs) {
+    dd.promise = s3.getData(event.env.s3Bucket, dd.s3Path)
   }
+
+  Promise.all(dataDefs.map(dd => dd.promise)).then(values => {
+    // "zip" data defs and their respective S3 values into new objects
+    const objects = dataDefs.map((dd, i) => ({
+      dd: dd,
+      value: values[i].Body
+    }))
+
+    // assign the results of each promise to the appropriate variables
+    for (var obj of objects) { obj.dd.obj[obj.dd.objKey] = obj.value }
+
+    initEventCallback()
+  }).catch(err => initEventCallback(err))
 }
 
 function handleErr(err, callback) {
