@@ -11,22 +11,15 @@ const s3 = require('./s3')
 function handler(event, context, callback) {
   _initEvent(event, context)
     .then(event => {
-      return fdsh.createClient(event.env.host,
-                               event.env.port,
-                               event.env.path,
-                               // TODO: make less API-Gateway'esque
-                               event.env.userId,
-                               event.env.password,
-                               event.params.path.service)
-    })
-    .then(client => {
-      return fdsh.invokeMethod(client,
-                               event.env.cert,
-                               event.env.key,
-                               // TODO: make less API-Gateway'esque
-                               event.params.path.method,
-                               // TODO: make less API-Gateway'esque
-                               event.params.querystring)
+      return fdsh[event.params.path.service][event.params.path.method]({
+        host: event.env.host,
+        port: event.env.port,
+        path: event.env.path,
+        userId: event.env.userId,
+        password: event.env.password,
+        cert: event.env.cert,
+        key: event.env.key,
+      }, event.params.querystring)
     })
     .then(result => callback(null, result))
     .catch(err => {
