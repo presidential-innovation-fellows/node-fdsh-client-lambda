@@ -15,18 +15,18 @@ function handler(event, context, callback) {
                                event.env.port,
                                event.env.path,
                                // TODO: make less API-Gateway'esque
-                               event.params.path.service,
                                event.env.userId,
-                               event.env.password)
+                               event.env.password,
+                               event.params.path.service)
     })
     .then(client => {
       return fdsh.invokeMethod(client,
+                               event.env.cert,
+                               event.env.key,
                                // TODO: make less API-Gateway'esque
                                event.params.path.method,
                                // TODO: make less API-Gateway'esque
-                               event.params.querystring,
-                               event.env.cert,
-                               event.env.key)
+                               event.params.querystring)
     })
     .then(result => callback(null, result))
     .catch(err => {
